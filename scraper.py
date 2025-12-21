@@ -116,62 +116,82 @@ def scrape_beyondchats_blogs():
         return []
 
 def scrape_article_content(url):
-    """Scrape the full content of an individual article"""
+    """Scrape the full content of an individual article - ENHANCED VERSION"""
     try:
         response = requests.get(url, headers={
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-        }, timeout=10)
+        }, timeout=15)
         response.raise_for_status()
         
         soup = BeautifulSoup(response.content, 'html.parser')
         
-        # Remove unwanted elements
-        for element in soup(['script', 'style', 'nav', 'header', 'footer', 'aside', 'iframe']):
+        # First, try to find and extract the actual blog post content
+        # BeyondChats specific: Look for the main blog content
+        
+        # Remove unwanted elements first
+        for element in soup(['script', 'style', 'nav', 'header', 'footer', 'aside', 'iframe', 'form', 'button']):
             element.decompose()
         
-        # Try multiple strategies to find content
-        content_elem = None
+        # Remove comments section
+        for comment_section in soup.find_all(['div', 'section'], class_=lambda x: x and any(
+            word in str(x).lower() for word in ['comment', 'reply', 'discussion']
+        )):
+            comment_section.decompose()
         
-        # Strategy 1: Look for article or main tags
-        content_elem = soup.find('article')
-        if not content_elem:
-            content_elem = soup.find('main')
+        # Try to find the main article content
+        content_text = ""
         
-        # Strategy 2: Look for common content class names
-        if not content_elem:
-            content_elem = soup.find('div', class_=lambda x: x and any(
-                word in str(x).lower() for word in ['post-content', 'entry-content', 'article-content', 'blog-content', 'content-area']
-            ))
-        
-        # Strategy 3: Look for any div with 'content' in class
-        if not content_elem:
-            content_elem = soup.find('div', class_=lambda x: x and 'content' in str(x).lower())
-        
-        # Strategy 4: Fall back to body but try to exclude common non-content areas
-        if not content_elem:
-            content_elem = soup.find('body')
-            if content_elem:
-                # Remove header, footer, sidebar, etc.
-                for elem in content_elem.find_all(['header', 'footer', 'nav', 'aside']):
-                    elem.decompose()
-        
-        if content_elem:
-            # Extract text from paragraphs and headings
-            text_elements = []
-            for elem in content_elem.find_all(['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'li']):
-                text = elem.get_text(strip=True)
-                if text and len(text) > 20:  # Filter out very short text
-                    text_elements.append(text)
+        # Strategy 1: Look for article tag
+        article_tag = soup.find('article')
+        if article_tag:
+            # Get all paragraphs within article, excluding comments
+            paragraphs = []
+            for p in article_tag.find_all('p'):
+                text = p.get_text(strip=True)
+                # Filter out comment-like content
+                if text and len(text) > 50 and not any(
+                    phrase in text.lower() for phrase in ['reply', 'comment', 'leave a comment', 'says:', 'wrote:']
+                ):
+                    paragraphs.append(text)
             
-            content = '\n\n'.join(text_elements)
-            
-            # If content is too short, try getting all text
-            if len(content) < 200:
-                content = content_elem.get_text(separator='\n\n', strip=True)
-            
-            return content[:10000]  # Increased limit
+            if paragraphs:
+                content_text = '\n\n'.join(paragraphs)
         
-        return "Content could not be extracted from this article."
+        # Strategy 2: Look for main content divs
+        if len(content_text) < 300:
+            for class_name in ['post-content', 'entry-content', 'article-body', 'blog-post', 'content-area', 'post-body']:
+                content_div = soup.find(['div', 'section'], class_=lambda x: x and class_name in str(x).lower())
+                if content_div:
+                    paragraphs = []
+                    for p in content_div.find_all(['p', 'h2', 'h3', 'h4']):
+                        text = p.get_text(strip=True)
+                        if text and len(text) > 30:
+                            paragraphs.append(text)
+                    if len(paragraphs) > 3:
+                        content_text = '\n\n'.join(paragraphs)
+                        break
+        
+        # Strategy 3: Get all paragraphs from body, but filter intelligently
+        if len(content_text) < 300:
+            all_paragraphs = soup.find_all('p')
+            main_content = []
+            for p in all_paragraphs:
+                text = p.get_text(strip=True)
+                # Only include substantial paragraphs, exclude navigation/footer/comment text
+                if (len(text) > 100 and 
+                    not any(word in text.lower() for word in ['cookie', 'privacy policy', 'terms of service', 'copyright', '©', 'all rights reserved']) and
+                    not text.lower().startswith(('reply', 'comment', 'posted by', 'written by')) and
+                    not '@' in text):  # Likely email or social media
+                    main_content.append(text)
+            
+            if len(main_content) >= 3:
+                content_text = '\n\n'.join(main_content)
+        
+        # Final cleanup
+        if content_text and len(content_text) > 200:
+            return content_text[:15000]  # Return up to 15k characters
+        
+        return f"Unable to extract sufficient content from {url}. The page may require JavaScript or have a different structure."
         
     except Exception as e:
         print(f"  ⚠ Error scraping article content from {url}: {e}")
