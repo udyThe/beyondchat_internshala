@@ -70,6 +70,12 @@ cd laravel-api
 # Install dependencies
 npm install
 
+# Create environment file
+cp .env.example .env
+
+# Edit .env if needed (default values work for local development)
+# PORT=8000 (optional, defaults to 8000)
+
 # Run the seeder to populate database with scraped articles
 npm run seed
 
@@ -110,11 +116,18 @@ cd ../reactjs-frontend
 # Install dependencies
 npm install
 
+# Create environment file
+cp .env.example .env
+
+# Edit .env if needed
+# VITE_API_URL=http://localhost:8000
+# VITE_PORT=3000 (change if port 3000 is in use)
+
 # Start the development server
 npm run dev
 ```
 
-The frontend will be running on `http://localhost:3000`
+The frontend will be running on `http://localhost:3000` (or the port specified in .env)
 
 ### Step 5: Run the Initial Scraper (Optional)
 
@@ -229,23 +242,92 @@ The frontend features:
 - **AI**: OpenAI GPT-3.5 Turbo
 - **Styling**: Custom CSS (no frameworks for better performance)
 
-## 🌐 Live Deployment
+## 🌐 Deployment Guide
 
-**Frontend Live Link**: [Coming Soon - Deploy to Vercel/Netlify]
+### Backend Deployment (Render/Railway/Heroku)
 
-To deploy:
+1. **Push to GitHub**
+   ```bash
+   git add .
+   git commit -m "Ready for deployment"
+   git push origin main
+   ```
 
-1. **API**: Deploy to Render, Railway, or Heroku
-2. **Frontend**: Deploy to Vercel or Netlify
-3. Update `VITE_API_URL` in frontend to point to deployed API
+2. **Deploy to Render.com** (Recommended for free tier)
+   - Create new Web Service
+   - Connect your GitHub repo
+   - Set root directory: `laravel-api`
+   - Build command: `npm install`
+   - Start command: `npm start`
+   - Add environment variables:
+     - `PORT` (set automatically by Render)
+     - `NODE_ENV=production`
+
+3. **Database**: SQLite file will persist on the server
+
+### Frontend Deployment (Vercel/Netlify)
+
+1. **Deploy to Vercel** (Recommended)
+   ```bash
+   cd reactjs-frontend
+   npm run build
+   vercel --prod
+   ```
+
+2. **Or Deploy to Netlify**
+   - Connect your GitHub repo
+   - Base directory: `reactjs-frontend`
+   - Build command: `npm run build`
+   - Publish directory: `dist`
+   - Add environment variable:
+     - `VITE_API_URL=https://your-api-domain.com`
+
+3. **Update API URL**: Set `VITE_API_URL` to your deployed backend URL
+
+### Quick Deploy Checklist
+
+- [ ] All `.env.example` files are committed to repo
+- [ ] Actual `.env` files are in `.gitignore`
+- [ ] No hardcoded URLs in code
+- [ ] Database file is excluded from git
+- [ ] CORS is properly configured in backend
+- [ ] Frontend points to production API URL
+- [ ] Test all API endpoints after deployment
+- [ ] Run demo enhancement script to verify full workflow
 
 ## 📝 Environment Variables
 
+### laravel-api/.env
+```env
+APP_NAME="BeyondChats Article Manager"
+APP_ENV=local
+APP_DEBUG=true
+APP_URL=http://localhost:8000
+
+PORT=8000                              # API server port
+
+DB_CONNECTION=sqlite
+DB_DATABASE=database/database.sqlite    # Relative path to SQLite database
+```
+
 ### nodejs-script/.env
 ```env
-API_BASE_URL=http://localhost:8000
-OPENAI_API_KEY=your_openai_api_key_here
+API_BASE_URL=http://localhost:8000      # Backend API URL
+OPENAI_API_KEY=your_openai_api_key_here # Get from https://platform.openai.com/api-keys
 USER_AGENT=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36
+```
+
+### reactjs-frontend/.env
+```env
+VITE_API_URL=http://localhost:8000      # Backend API URL
+VITE_PORT=3000                           # Frontend dev server port
+```
+
+### Python Scraper (Optional - via environment variables)
+```bash
+export BLOG_URL="https://beyondchats.com/blogs"
+export API_BASE_URL="http://localhost:8000"
+export NUM_ARTICLES=5
 ```
 
 ## 🤝 Contributing

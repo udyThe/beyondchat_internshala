@@ -8,18 +8,19 @@ from bs4 import BeautifulSoup
 import json
 import time
 from datetime import datetime
+from scraper_config import BLOG_BASE_URL, API_BASE_URL, NUM_ARTICLES, USER_AGENT
 
 def scrape_beyondchats_blogs():
     """Scrape articles from BeyondChats blog"""
     
-    base_url = "https://beyondchats.com/blogs"
+    base_url = BLOG_BASE_URL
     
-    print("Fetching blog page...")
+    print(f"Fetching blog page from {base_url}...")
     
     try:
         # First, get the main blogs page to find pagination
         response = requests.get(base_url, headers={
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+            'User-Agent': USER_AGENT
         })
         response.raise_for_status()
         
@@ -200,6 +201,8 @@ def scrape_article_content(url):
 if __name__ == "__main__":
     print("=" * 60)
     print("BeyondChats Blog Scraper")
+    print(f"Target: {BLOG_BASE_URL}")
+    print(f"Number of articles: {NUM_ARTICLES}")
     print("=" * 60)
     print()
     

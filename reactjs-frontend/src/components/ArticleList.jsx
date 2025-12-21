@@ -29,7 +29,10 @@ function ArticleList({ filter = 'all' }) {
       setArticles(filteredArticles);
     } catch (err) {
       console.error('Error fetching articles:', err);
-      setError('Failed to load articles. Make sure the API server is running on http://localhost:8000');
+      setError('Failed to load articles. Make sure the API server is running.');
+      if (err.response) {
+        setError(`API Error: ${err.response.status} - ${err.response.statusText}`);
+      }
     } finally {
       setLoading(false);
     }
