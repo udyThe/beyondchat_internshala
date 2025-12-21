@@ -1,0 +1,265 @@
+# BeyondChats Article Manager
+
+A full-stack application that scrapes articles, optimizes them using AI, and displays them in a beautiful React frontend.
+
+## 🏗️ Architecture
+
+```
+┌─────────────────────┐
+│  Web Scraper        │
+│  (Python)           │
+│  - Scrapes articles │
+│  - Extracts content │
+└──────────┬──────────┘
+           │
+           ▼
+┌─────────────────────┐
+│  API Server         │
+│  (Node.js/Express)  │
+│  - SQLite Database  │
+│  - CRUD Operations  │
+└──────────┬──────────┘
+           │
+     ┌─────┴─────┐
+     │           │
+     ▼           ▼
+┌─────────┐ ┌──────────────────┐
+│ NodeJS  │ │  React Frontend  │
+│ Script  │ │  (Vite)          │
+│         │ │  - Article List  │
+│ - Google│ │  - Detail View   │
+│   Search│ │  - Responsive UI │
+│ - Scrape│ └──────────────────┘
+│ - LLM   │
+│ - Update│
+└─────────┘
+```
+
+## 📊 Data Flow
+
+1. **Scraping Phase**: Python script scrapes 5 oldest articles from BeyondChats blogs
+2. **Storage Phase**: Articles are stored in SQLite database via API
+3. **Optimization Phase**: Node.js script:
+   - Fetches latest article from API
+   - Searches Google for the article title
+   - Scrapes top 2 ranking articles
+   - Uses LLM (OpenAI) to optimize the article
+   - Publishes optimized version back to API
+4. **Display Phase**: React frontend displays both original and optimized articles
+
+## 🚀 Local Setup Instructions
+
+### Prerequisites
+
+- Node.js (v16 or higher)
+- npm or yarn
+- Python 3.x (for initial scraping)
+
+### Step 1: Clone the Repository
+
+```bash
+git clone <your-repo-url>
+cd beyondchat_internshala
+```
+
+### Step 2: Set Up API Server
+
+```bash
+cd laravel-api
+
+# Install dependencies
+npm install
+
+# Run the seeder to populate database with scraped articles
+npm run seed
+
+# Start the API server
+npm start
+```
+
+The API server will be running on `http://localhost:8000`
+
+### Step 3: Set Up Node.js Optimization Script
+
+```bash
+cd ../nodejs-script
+
+# Install dependencies
+npm install
+
+# Create .env file
+cp .env.example .env
+
+# Edit .env and add your OpenAI API key (optional but recommended)
+# OPENAI_API_KEY=your_openai_api_key_here
+
+# Run the script to optimize an article
+npm start
+```
+
+**Note**: If you don't have an OpenAI API key, the script will use mock optimization. To get a real API key:
+1. Go to https://platform.openai.com/api-keys
+2. Create a new API key
+3. Add it to the `.env` file
+
+### Step 4: Set Up React Frontend
+
+```bash
+cd ../reactjs-frontend
+
+# Install dependencies
+npm install
+
+# Start the development server
+npm run dev
+```
+
+The frontend will be running on `http://localhost:3000`
+
+### Step 5: Run the Initial Scraper (Optional)
+
+If you want to scrape new articles:
+
+```bash
+cd ..
+
+# Install Python dependencies
+pip install requests beautifulsoup4
+
+# Run the scraper
+python3 scraper.py
+```
+
+## 📁 Project Structure
+
+```
+beyondchat_internshala/
+├── laravel-api/           # Backend API (Node.js/Express)
+│   ├── server.js          # Main API server
+│   ├── database.js        # Database connection and queries
+│   ├── seed.js            # Database seeder
+│   ├── package.json
+│   └── database/
+│       └── database.sqlite
+│
+├── nodejs-script/         # Article optimization script
+│   ├── index.js           # Main script orchestrator
+│   ├── apiClient.js       # API client for backend
+│   ├── googleSearch.js    # Google search and scraping
+│   ├── articleOptimizer.js # LLM integration
+│   ├── .env               # Environment variables
+│   └── package.json
+│
+├── reactjs-frontend/      # React frontend
+│   ├── src/
+│   │   ├── App.jsx        # Main app component
+│   │   ├── api.js         # API service
+│   │   ├── components/
+│   │   │   ├── ArticleList.jsx
+│   │   │   └── ArticleDetail.jsx
+│   │   └── index.css      # Styles
+│   ├── index.html
+│   ├── vite.config.js
+│   └── package.json
+│
+├── scraper.py             # Initial web scraper (Python)
+├── scraped_articles.json  # Scraped articles data
+└── README.md              # This file
+```
+
+## 🎯 Features
+
+### Phase 1: Web Scraping & API (✅ Complete)
+- ✅ Scrapes 5 oldest articles from BeyondChats blogs
+- ✅ Stores articles in SQLite database
+- ✅ RESTful CRUD API with Express.js
+- ✅ Endpoints for articles management
+
+### Phase 2: AI Optimization (✅ Complete)
+- ✅ Fetches latest article from API
+- ✅ Searches Google for article title
+- ✅ Scrapes top 2 ranking articles
+- ✅ Uses OpenAI GPT to optimize content
+- ✅ Publishes optimized article with references
+- ✅ Fallback to mock optimization if no API key
+
+### Phase 3: React Frontend (✅ Complete)
+- ✅ Professional, responsive UI
+- ✅ Article listing with filters
+- ✅ Detailed article view
+- ✅ Shows both original and optimized versions
+- ✅ Markdown rendering
+- ✅ Mobile-friendly design
+
+## 🔌 API Endpoints
+
+```
+GET    /                    - API documentation
+GET    /articles            - Get all articles
+GET    /articles/latest     - Get latest unupdated article
+GET    /articles/:id        - Get article by ID
+POST   /articles            - Create new article
+PUT    /articles/:id        - Update article
+DELETE /articles/:id        - Delete article
+```
+
+## 🧪 Testing the Workflow
+
+1. **Start the API server**: `cd laravel-api && npm start`
+2. **Visit API docs**: Open http://localhost:8000 in browser
+3. **Check articles**: http://localhost:8000/articles
+4. **Run optimization script**: `cd nodejs-script && npm start`
+5. **View frontend**: `cd reactjs-frontend && npm run dev`
+6. **Open browser**: http://localhost:3000
+
+## 🎨 Frontend Screenshots
+
+The frontend features:
+- **Home Page**: Grid view of all articles
+- **Original Articles**: Filter for original content
+- **Optimized Articles**: Filter for AI-optimized content
+- **Article Detail**: Full article view with related versions
+- **Responsive Design**: Works on mobile, tablet, and desktop
+
+## 🛠️ Technologies Used
+
+- **Backend**: Node.js, Express.js, SQLite
+- **Frontend**: React, Vite, React Router, Axios
+- **Scraping**: Python, BeautifulSoup, Cheerio
+- **AI**: OpenAI GPT-3.5 Turbo
+- **Styling**: Custom CSS (no frameworks for better performance)
+
+## 🌐 Live Deployment
+
+**Frontend Live Link**: [Coming Soon - Deploy to Vercel/Netlify]
+
+To deploy:
+
+1. **API**: Deploy to Render, Railway, or Heroku
+2. **Frontend**: Deploy to Vercel or Netlify
+3. Update `VITE_API_URL` in frontend to point to deployed API
+
+## 📝 Environment Variables
+
+### nodejs-script/.env
+```env
+API_BASE_URL=http://localhost:8000
+OPENAI_API_KEY=your_openai_api_key_here
+USER_AGENT=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36
+```
+
+## 🤝 Contributing
+
+This is a demo project for BeyondChats internship application.
+
+## 📄 License
+
+MIT License
+
+## 👤 Author
+
+Uday - BeyondChats Internship Candidate
+
+---
+
+**Note**: Make sure the API server is running before starting the frontend or optimization script!

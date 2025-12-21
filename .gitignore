@@ -1,0 +1,46 @@
+# Laravel
+laravel-api/vendor/
+laravel-api/node_modules/
+laravel-api/.env
+laravel-api/storage/*.key
+laravel-api/.phpunit.result.cache
+laravel-api/Homestead.json
+laravel-api/Homestead.yaml
+laravel-api/npm-debug.log
+laravel-api/yarn-error.log
+laravel-api/.idea
+laravel-api/.vscode
+laravel-api/storage/app/*
+laravel-api/storage/framework/cache/*
+laravel-api/storage/framework/sessions/*
+laravel-api/storage/framework/testing/*
+laravel-api/storage/framework/views/*
+laravel-api/storage/logs/*
+laravel-api/bootstrap/cache/*
+
+# NodeJS
+nodejs-script/node_modules/
+nodejs-script/.env
+nodejs-script/npm-debug.log
+nodejs-script/yarn-error.log
+nodejs-script/.pnp
+nodejs-script/.pnp.js
+
+# React
+reactjs-frontend/node_modules/
+reactjs-frontend/build/
+reactjs-frontend/.env
+reactjs-frontend/.env.local
+reactjs-frontend/.env.development.local
+reactjs-frontend/.env.test.local
+reactjs-frontend/.env.production.local
+reactjs-frontend/npm-debug.log*
+reactjs-frontend/yarn-debug.log*
+reactjs-frontend/yarn-error.log*
+
+# General
+.DS_Store
+*.log
+*.sqlite
+.idea/
+.vscode/
