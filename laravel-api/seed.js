@@ -37,21 +37,16 @@ setTimeout(() => {
       if (completed + failed === articlesData.length) {
         console.log(`\n✓ Seeding completed! (${completed} successful, ${failed} failed)`);
         
-        // Run demo-enhancement to create optimized versions
-        console.log('\n📝 Running demo enhancement...');
-        const enhancement = spawn('node', ['../nodejs-script/demo-enhancement.js'], { 
-          stdio: 'inherit',
-          cwd: __dirname 
-        });
-        
-        enhancement.on('close', (code) => {
-          if (code === 0) {
-            console.log('✅ Demo enhancement completed!');
-          } else {
-            console.log('⚠️  Demo enhancement failed, but continuing...');
+        // Run enhancement after a delay
+        setTimeout(async () => {
+          try {
+            await runEnhancement();
+            process.exit(0);
+          } catch (error) {
+            console.error('Enhancement error:', error.message);
+            process.exit(0);
           }
-          process.exit(0);
-        });
+        }, 2000);
       }
     });
   });
