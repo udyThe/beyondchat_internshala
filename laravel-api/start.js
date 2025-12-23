@@ -21,7 +21,8 @@ async function startServer() {
         seed.on('close', (code) => {
           if (code === 0) {
             console.log('✅ Seed completed successfully');
-            resolve();
+            // Wait a moment for database writes to complete
+            setTimeout(resolve, 1000);
           } else {
             reject(new Error(`Seed failed with code ${code}`));
           }
