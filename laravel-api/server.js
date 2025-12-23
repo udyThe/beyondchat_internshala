@@ -121,6 +121,8 @@ app.use((err, req, res, next) => {
 
 // Start server
 app.listen(PORT, () => {
-  console.log(`\n✓ Server is running on http://localhost:${PORT}`);
-  console.log(`✓ API Documentation: http://localhost:${PORT}\n`);
+  const baseUrl = process.env.APP_URL || `http://localhost:${PORT}`;
+  console.log(`\n✓ Server is running on ${baseUrl}`);
+  console.log(`✓ API Documentation: ${baseUrl}`);
+  console.log(`✓ Environment: ${process.env.NODE_ENV || 'development'}\n`);
 });
