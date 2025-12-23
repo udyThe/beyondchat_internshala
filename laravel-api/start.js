@@ -1,11 +1,15 @@
 const { spawn } = require('child_process');
-const Database = require('./database');
+const db = require('./database');
 
 async function startServer() {
   try {
     // Check if database has articles
-    const db = new Database();
-    const articles = await db.getAll();
+    const articles = await new Promise((resolve, reject) => {
+      db.getAll((err, rows) => {
+        if (err) reject(err);
+        else resolve(rows || []);
+      });
+    });
     
     if (articles.length === 0) {
       console.log('📦 Database is empty. Running seed script...');
