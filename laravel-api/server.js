@@ -124,5 +124,6 @@ app.listen(PORT, () => {
   const baseUrl = process.env.APP_URL || `http://localhost:${PORT}`;
   console.log(`\n✓ Server is running on ${baseUrl}`);
   console.log(`✓ API Documentation: ${baseUrl}`);
-  console.log(`✓ Environment: ${process.env.NODE_ENV || 'development'}\n`);
+  console.log(`✓ Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`✓ Database ready\n`);
 });

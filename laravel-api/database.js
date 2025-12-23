@@ -1,7 +1,14 @@
 const sqlite3 = require('sqlite3').verbose();
 const path = require('node:path');
 
-const dbPath = path.join(__dirname, 'database', 'database.sqlite');
+// Use /tmp for production (Render), local path for development
+const isProduction = process.env.NODE_ENV === 'production';
+const dbPath = isProduction 
+  ? '/tmp/database.sqlite'
+  : path.join(__dirname, 'database', 'database.sqlite');
+
+console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+console.log(`Database path: ${dbPath}`);
 
 class Database {
   constructor() {
