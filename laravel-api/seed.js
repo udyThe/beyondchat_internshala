@@ -1,5 +1,6 @@
 const fs = require('node:fs');
 const path = require('node:path');
+const { spawn } = require('child_process');
 const database = require('./database');
 
 console.log('Article Seeder - Importing scraped articles');
