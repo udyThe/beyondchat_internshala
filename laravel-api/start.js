@@ -3,6 +3,9 @@ const db = require('./database');
 
 async function startServer() {
   try {
+    // Wait for database and tables to be ready
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    
     // Check if database has articles
     const articles = await new Promise((resolve, reject) => {
       db.getAll((err, rows) => {
