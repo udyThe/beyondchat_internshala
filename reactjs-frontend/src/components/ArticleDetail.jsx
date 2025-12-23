@@ -31,7 +31,7 @@ function ArticleDetail() {
       else {
         const allArticles = await articleAPI.getAll();
         const optimizedVersion = allArticles.data.find(
-          a => a.parent_article_id === parseInt(id)
+          a => a.parent_article_id === Number.parseInt(id, 10)
         );
         if (optimizedVersion) {
           setRelatedArticle(optimizedVersion);

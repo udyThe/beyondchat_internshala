@@ -147,8 +147,8 @@ async function scrapeArticleContent(url) {
     
     // Clean up the content
     content = content
-      .replace(/\s+/g, ' ')
-      .replace(/\n\s*\n/g, '\n\n')
+      .replaceAll(/\s+/g, ' ')
+      .replaceAll(/\n\s*\n/g, '\n\n')
       .trim();
     
     // Limit content length

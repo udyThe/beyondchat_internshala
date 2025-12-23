@@ -29,6 +29,7 @@ nodejs-script/.pnp.js
 # React
 reactjs-frontend/node_modules/
 reactjs-frontend/build/
+reactjs-frontend/dist/
 reactjs-frontend/.env
 reactjs-frontend/.env.local
 reactjs-frontend/.env.development.local
@@ -38,9 +39,12 @@ reactjs-frontend/npm-debug.log*
 reactjs-frontend/yarn-debug.log*
 reactjs-frontend/yarn-error.log*
 
+# Database
+laravel-api/database/database.sqlite
+*.sqlite
+
 # General
 .DS_Store
 *.log
-*.sqlite
 .idea/
 .vscode/

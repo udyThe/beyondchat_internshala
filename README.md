@@ -2,7 +2,22 @@
 
 A full-stack application that scrapes articles, optimizes them using AI, and displays them in a beautiful React frontend.
 
-## 🏗️ Architecture
+## � Live Demo
+
+> **Frontend Live Link**: [View Deployed Application](#deployment-instructions)  
+> **API Documentation**: [Backend API Endpoints](#-api-endpoints)  
+> **GitHub Repository**: [Source Code](https://github.com/yourusername/beyondchat_internshala)
+
+**Note**: After deployment, update the live links above with your actual deployed URLs.
+
+### Quick Links
+- 📱 [View Original Articles](#) - Browse articles scraped from BeyondChats
+- 🤖 [View Optimized Articles](#) - See AI-enhanced versions
+- 📊 [Compare Versions](#) - Side-by-side comparison
+
+---
+
+## �🏗️ Architecture
 
 ```
 ┌─────────────────────┐
@@ -244,56 +259,118 @@ The frontend features:
 
 ## 🌐 Deployment Guide
 
-### Backend Deployment (Render/Railway/Heroku)
+### Option 1: Quick Deploy to Vercel + Render (Recommended)
 
-1. **Push to GitHub**
+#### Backend Deployment (Render.com - Free Tier)
+
+1. **Create a Render account** at https://render.com
+
+2. **Deploy Backend**:
+   - Click "New +" → "Web Service"
+   - Connect your GitHub repository
+   - Configure:
+     - **Name**: `beyondchats-api`
+     - **Root Directory**: `laravel-api`
+     - **Environment**: Node
+     - **Build Command**: `npm install && npm run seed`
+     - **Start Command**: `npm start`
+   - Add Environment Variables:
+     - `NODE_ENV=production`
+   - Click "Create Web Service"
+   - Note your deployed URL (e.g., `https://beyondchats-api.onrender.com`)
+
+3. **Database**: SQLite file will be created automatically by the seed script
+
+#### Frontend Deployment (Vercel - Free Tier)
+
+1. **Install Vercel CLI** (if not already installed):
    ```bash
-   git add .
-   git commit -m "Ready for deployment"
-   git push origin main
+   npm install -g vercel
    ```
 
-2. **Deploy to Render.com** (Recommended for free tier)
-   - Create new Web Service
-   - Connect your GitHub repo
-   - Set root directory: `laravel-api`
-   - Build command: `npm install`
-   - Start command: `npm start`
-   - Add environment variables:
-     - `PORT` (set automatically by Render)
-     - `NODE_ENV=production`
-
-3. **Database**: SQLite file will persist on the server
-
-### Frontend Deployment (Vercel/Netlify)
-
-1. **Deploy to Vercel** (Recommended)
+2. **Deploy Frontend**:
    ```bash
    cd reactjs-frontend
-   npm run build
+   
+   # Update .env with your deployed backend URL
+   echo "VITE_API_URL=https://beyondchats-api.onrender.com" > .env.production
+   
+   # Deploy to Vercel
    vercel --prod
    ```
 
-2. **Or Deploy to Netlify**
-   - Connect your GitHub repo
-   - Base directory: `reactjs-frontend`
-   - Build command: `npm run build`
-   - Publish directory: `dist`
-   - Add environment variable:
-     - `VITE_API_URL=https://your-api-domain.com`
+3. **Or Deploy via Vercel Dashboard**:
+   - Go to https://vercel.com
+   - Import your GitHub repository
+   - Configure:
+     - **Root Directory**: `reactjs-frontend`
+     - **Build Command**: `npm run build`
+     - **Output Directory**: `dist`
+     - **Environment Variables**:
+       - `VITE_API_URL=https://your-backend-url.onrender.com`
+   - Click "Deploy"
 
-3. **Update API URL**: Set `VITE_API_URL` to your deployed backend URL
+4. **Get your live URL**: `https://your-project.vercel.app`
 
-### Quick Deploy Checklist
+### Option 2: Deploy to Netlify
 
-- [ ] All `.env.example` files are committed to repo
-- [ ] Actual `.env` files are in `.gitignore`
-- [ ] No hardcoded URLs in code
-- [ ] Database file is excluded from git
-- [ ] CORS is properly configured in backend
-- [ ] Frontend points to production API URL
-- [ ] Test all API endpoints after deployment
-- [ ] Run demo enhancement script to verify full workflow
+```bash
+cd reactjs-frontend
+
+# Install Netlify CLI
+npm install -g netlify-cli
+
+# Build the project
+npm run build
+
+# Deploy
+netlify deploy --prod
+```
+
+### Option 3: Manual Deployment
+
+#### Backend (Any Node.js Hosting)
+- Upload `laravel-api/` folder
+- Set environment variables
+- Run `npm install && npm run seed && npm start`
+
+#### Frontend (Any Static Hosting)
+- Build: `npm run build` in `reactjs-frontend/`
+- Upload `dist/` folder contents
+- Configure environment variables before build
+
+### Post-Deployment Checklist
+
+- [ ] Backend API is accessible (test with `/articles` endpoint)
+- [ ] Database is seeded with articles
+- [ ] Frontend loads without errors
+- [ ] Frontend can fetch articles from backend API
+- [ ] CORS is properly configured
+- [ ] Environment variables are set correctly
+- [ ] Update README with actual live links
+
+### Deployment Troubleshooting
+
+**Backend Issues:**
+- If database is empty, manually run: `npm run seed`
+- Check Render logs for any startup errors
+- Verify PORT environment variable is set by Render automatically
+
+**Frontend Issues:**
+- Ensure `VITE_API_URL` points to deployed backend
+- Check browser console for CORS errors
+- Verify backend is responding before frontend loads
+
+**CORS Issues:**
+If you see CORS errors, ensure backend `server.js` has:
+```javascript
+app.use(cors({
+  origin: ['https://your-frontend-domain.vercel.app'],
+  credentials: true
+}));
+```
+
+---
 
 ## 📝 Environment Variables
 
