@@ -35,7 +35,7 @@ setTimeout(() => {
       // Check if all articles have been processed
       if (completed + failed === articlesData.length) {
         console.log(`\n✓ Seeding completed! (${completed} successful, ${failed} failed)`);
-        database.close();
+        // Don't close database - let the parent process handle it
         process.exit(0);
       }
     });
@@ -44,7 +44,6 @@ setTimeout(() => {
 
 // Timeout after 15 seconds
 setTimeout(() => {
-  console.log('\nTimeout - closing database');
-  database.close();
+  console.log('\nTimeout - exiting seeder');
   process.exit(0);
 }, 15000);
