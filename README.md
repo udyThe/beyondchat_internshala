@@ -2,22 +2,15 @@
 
 A full-stack application that scrapes articles, optimizes them using AI, and displays them in a beautiful React frontend.
 
-## � Live Demo
+## 🌐 Live Demo
 
-> **Frontend Live Link**: [View Deployed Application](#deployment-instructions)  
-> **API Documentation**: [Backend API Endpoints](#-api-endpoints)  
-> **GitHub Repository**: [Source Code](https://github.com/yourusername/beyondchat_internshala)
-
-**Note**: After deployment, update the live links above with your actual deployed URLs.
-
-### Quick Links
-- 📱 [View Original Articles](#) - Browse articles scraped from BeyondChats
-- 🤖 [View Optimized Articles](#) - See AI-enhanced versions
-- 📊 [Compare Versions](#) - Side-by-side comparison
+> **Frontend Live Link**: https://beyondchatt.netlify.app/  
+> **Backend API**: https://beyondchats-api-1o4t.onrender.com  
+> **GitHub Repository**: https://github.com/udyThe/beyondchat_internshala
 
 ---
 
-## �🏗️ Architecture
+## 🏗️ Architecture
 
 ```
 ┌─────────────────────┐
