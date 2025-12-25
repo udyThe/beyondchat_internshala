@@ -8,6 +8,11 @@ A full-stack application that scrapes articles, optimizes them using AI, and dis
 > **Backend API**: https://beyondchats-api-1o4t.onrender.com  
 > **GitHub Repository**: https://github.com/udyThe/beyondchat_internshala
 
+### Quick Links
+- 📱 [View All Articles](https://beyondchatt.netlify.app/) - Browse all articles
+- 📝 [Original Articles](https://beyondchatt.netlify.app/original) - Articles scraped from BeyondChats
+- ✨ [Optimized Articles](https://beyondchatt.netlify.app/optimized) - AI-enhanced versions
+
 ---
 
 ## 🏗️ Architecture
@@ -400,13 +405,7 @@ export API_BASE_URL="http://localhost:8000"
 export NUM_ARTICLES=5
 ```
 
-## 🤝 Contributing
-
-This is a demo project for BeyondChats internship application.
-
-## 📄 License
-
-MIT License
+---
 
 ## 👤 Author
 
