@@ -26,10 +26,6 @@ function App() {
             <Route path="/article/:id" element={<ArticleDetail />} />
           </Routes>
         </main>
-
-        <footer style={{ textAlign: 'center', padding: '2rem', color: '#64748b', borderTop: '1px solid #e2e8f0', marginTop: '4rem' }}>
-          <p>&copy; 2025 BeyondChats Article Manager. Built with React + Node.js</p>
-        </footer>
       </div>
     </Router>
   );
